@@ -1,7 +1,7 @@
 <template>
 <div>
-  <h1>All Recipes</h1>
-  <div v-for="recipe in recipes" v-bind:key="recipe._id">
+  <h1>Breakfast</h1>
+  <div v-for="recipe in breakfast" v-bind:key="recipe._id">
     <hr>
     <div class="recipe">
       <div class="ingredients">
@@ -20,29 +20,27 @@
 <script>
   import axios from 'axios';
   export default {
-    name: 'home',
+    name: 'breakfast',
     data() {
       return {
-        recipes: []
+        recipes: [],
       }
     },
     created() {
       this.getRecipes();
+    },
+    computed: {
+      breakfast: function() {
+        return this.recipes.filter(function(recipe) {
+          return recipe.category == "Breakfast";
+        })
+      }
     },
     methods: {
       async getRecipes() {
         try {
           let response = await axios.get("/api/recipes");
           this.recipes = response.data;
-        }
-        catch (error) {
-          console.log(error);
-        }
-      },
-      async deleteRecipe(recipe) {
-        try {
-          const response = await axios.delete("/api/recipes/" + recipe._id);
-          this.getRecipes();
         }
         catch (error) {
           console.log(error);
